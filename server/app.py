@@ -179,6 +179,15 @@ def create_employee():
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': 'Failed to create employee', 'details': str(e)}), 500
+    
+@app.route('/managers', methods=['POST'])
+def create_manager():
+    data = request.json
+    manager = Manager(**data)
+    db.session.add(manager)
+    db.session.commit()
+    return jsonify(manager.to_dict()), 201
+
 
 
 if __name__ == '__main__':
