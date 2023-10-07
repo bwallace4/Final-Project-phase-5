@@ -162,6 +162,24 @@ def delete_user(user_id):
     return jsonify({"message": "User deleted successfully"}), 200
 
 
+@app.route('/employees', methods=['POST'])
+def create_employee():
+    data = request.json
+
+    # Validate the data (e.g., check if required fields are present)
+    if 'name' not in data or 'level' not in data:
+        return jsonify({'error': 'Name and level are required fields'}), 400
+
+    employee = Employee(**data)
+
+    try:
+        db.session.add(employee)
+        db.session.commit()
+        return jsonify({'message': 'Employee created successfully', 'employee_id': employee.id}), 201
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': 'Failed to create employee', 'details': str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
