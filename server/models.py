@@ -7,11 +7,27 @@ from config import db
 
 # Models go here!
 
+user_employee_association = db.Table(
+    'user_employee_association',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('employee_id', db.Integer, db.ForeignKey('employee.id'))
+)
+
+user_task_association = db.Table(
+    'user_task_association',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('task_id', db.Integer, db.ForeignKey('task.id'))
+)
+
 class User(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     _password_hash = db.Column(db.String(128), nullable=False)
+    employees = db.relationship('Employee',secondary=user_employee_association,
+    backref=db.backref('users', lazy='dynamic'),lazy='dynamic')
+    tasks = db.relationship('Task', secondary=user_task_association,
+    backref=db.backref('users', lazy='dynamic'),lazy='dynamic' )
 
     @hybrid_property
     def password_hash(self):
@@ -50,7 +66,7 @@ class Employee(db.Model,SerializerMixin):
      name = db.Column(db.String(100), nullable=False)
      level = db.Column(db.Integer, nullable=False)
 
-class Task(db.Model):
+class Task(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=True)
@@ -61,7 +77,7 @@ class Task(db.Model):
     user = db.relationship('User', backref=db.backref('tasks', lazy=True))
 
 
-class Manager(db.Model):
+class Manager(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
