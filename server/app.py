@@ -188,6 +188,46 @@ def create_manager():
     db.session.commit()
     return jsonify(manager.to_dict()), 201
 
+@app.route('/tasks', methods=['POST'])
+def create_task():
+    data = request.json
+    task = Task(**data)
+    db.session.add(task)
+    db.session.commit()
+    return jsonify(task.to_dict()), 201
+
+@app.route('/associate_users_employees', methods=['POST'])
+def associate_users_employees():
+    # Assuming you receive data in the request (e.g., as JSON)
+    data = request.json
+
+    # Extract user_id and employee_id from the request data
+    user_id = data.get('user_id')
+    employee_id = data.get('employee_id')
+
+    if user_id is None or employee_id is None:
+        return jsonify({'error': 'Missing user_id or employee_id'}), 400
+
+    # Fetch the user and employee objects from the database
+    user = User.query.get(user_id)
+    employee = Employee.query.get(employee_id)
+
+    if user is None or employee is None:
+        return jsonify({'error': 'User or employee not found'}), 404
+
+    # Associate the user with the employee by adding them to the association table
+    user.employees.append(employee)
+
+    # Commit changes to the database
+    try:
+        db.session.commit()
+        return jsonify({'message': 'Association successful'}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': 'Database error', 'details': str(e)}), 500
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 
 if __name__ == '__main__':
