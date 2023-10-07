@@ -13,11 +13,6 @@ user_employee_association = db.Table(
     db.Column('employee_id', db.Integer, db.ForeignKey('employee.id'))
 )
 
-user_task_association = db.Table(
-    'user_task_association',
-    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
-    db.Column('task_id', db.Integer, db.ForeignKey('task.id'))
-)
 
 class User(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -26,8 +21,7 @@ class User(db.Model, SerializerMixin):
     _password_hash = db.Column(db.String(128), nullable=False)
     employees = db.relationship('Employee',secondary=user_employee_association,
     backref=db.backref('users', lazy='dynamic'),lazy='dynamic')
-    tasks = db.relationship('Task', secondary=user_task_association,
-    backref=db.backref('users', lazy='dynamic'),lazy='dynamic' )
+    
 
     @hybrid_property
     def password_hash(self):
