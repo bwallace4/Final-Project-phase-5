@@ -56,6 +56,7 @@ function UserList() {
             <tr>
               <th>Number</th>
               <th>Username</th>
+              <th>Email</th> {/* Add an email column */}
               <th>Action</th>
             </tr>
           </thead>
@@ -64,6 +65,7 @@ function UserList() {
               <tr key={user.id}>
                 <td>{index + 1}</td>
                 <td>{user.username}</td>
+                <td>{user.email}</td> {/* Display the user's email */}
                 <td>
                   <button onClick={() => handleDeleteUser(user.id)}>Delete</button>
                 </td>
