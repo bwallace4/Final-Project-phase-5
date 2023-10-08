@@ -30,7 +30,7 @@ function LoginForm() {
           history.push('/dashboard');
         } else {
           response.json().then((data) => {
-            // Handle login error, you can set an error state here
+            
             console.error('Login error:', data.error);
           });
         }
