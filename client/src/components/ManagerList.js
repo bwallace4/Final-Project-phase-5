@@ -5,8 +5,8 @@ function ManagerList() {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
-    email: "", 
-    department: "", 
+    email: "",
+    department: "",
     title: "",
   });
 
@@ -31,7 +31,6 @@ function ManagerList() {
         throw new Error("Failed to create manager");
       }
 
-   
       setFormData({
         name: "",
         email: "",
@@ -39,8 +38,27 @@ function ManagerList() {
         title: "",
       });
 
-     
       fetchManagers();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleDelete = async (managerId) => {
+    try {
+      const response = await fetch(`/managers/${managerId}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete the manager");
+      }
+
+      // Filter out the deleted manager from the managers array
+      const updatedManagers = managers.filter(
+        (manager) => manager.id !== managerId
+      );
+      setManagers(updatedManagers);
     } catch (error) {
       console.error(error);
     }
@@ -116,16 +134,17 @@ function ManagerList() {
         <p>Loading...</p>
       ) : (
         <ul>
-             {managers.map((manager) => (
-      <li key={manager.id}>
-        <strong>Name:</strong> {manager.name} <br />
-        <strong>Email:</strong> {manager.email} <br />
-        <strong>Department:</strong> {manager.department} <br />
-        <strong>Title:</strong> {manager.title}
-      </li>
-    ))}
-  </ul>
-)}     
+          {managers.map((manager) => (
+            <li key={manager.id}>
+              <strong>Name:</strong> {manager.name} <br />
+              <strong>Email:</strong> {manager.email} <br />
+              <strong>Department:</strong> {manager.department} <br />
+              <strong>Title:</strong> {manager.title}
+              <button onClick={() => handleDelete(manager.id)}>Delete</button>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

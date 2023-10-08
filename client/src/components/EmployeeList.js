@@ -27,7 +27,7 @@ function EmployeeList() {
   
     fetchEmployees();
 
-    // Refresh employee data every 2 seconds
+   
     const intervalId = setInterval(() => {
       fetchEmployees();
     }, 4000);
