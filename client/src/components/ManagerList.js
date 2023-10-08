@@ -54,7 +54,7 @@ function ManagerList() {
         throw new Error("Failed to delete the manager");
       }
 
-      // Filter out the deleted manager from the managers array
+     
       const updatedManagers = managers.filter(
         (manager) => manager.id !== managerId
       );
@@ -102,7 +102,7 @@ function ManagerList() {
         <div>
           <label>Email:</label>
           <input
-            type="email" // Use "email" input type for email field
+            type="email" 
             name="email"
             value={formData.email}
             onChange={handleChange}
