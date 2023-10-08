@@ -9,12 +9,12 @@ function UserList() {
     const getUsers = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch("/users"); // Replace with your API endpoint
+        const response = await fetch("/users");
         if (!response.ok) {
           throw new Error("Failed to fetch users");
         }
         const data = await response.json();
-        // Sort users by ID in ascending order
+       
         data.sort((a, b) => a.id - b.id);
         setUsers(data);
       } catch (error) {
@@ -24,10 +24,9 @@ function UserList() {
       }
     };
 
-    getUsers(); // Load users when the component mounts
+    getUsers(); 
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Empty dependency array to run the effect only once
+  }, []); 
 
   const handleDeleteUser = async (id) => {
     try {
@@ -56,7 +55,7 @@ function UserList() {
             <tr>
               <th>Number</th>
               <th>Username</th>
-              <th>Email</th> {/* Add an email column */}
+              <th>Email</th> 
               <th>Action</th>
             </tr>
           </thead>
@@ -65,7 +64,7 @@ function UserList() {
               <tr key={user.id}>
                 <td>{index + 1}</td>
                 <td>{user.username}</td>
-                <td>{user.email}</td> {/* Display the user's email */}
+                <td>{user.email}</td> 
                 <td>
                   <button onClick={() => handleDeleteUser(user.id)}>
                     Delete

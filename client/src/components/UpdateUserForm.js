@@ -1,28 +1,28 @@
 import React, { useState } from 'react';
 
 function UpdateUserForm({ match }) {
-  const { userId } = match.params; // Extract userId from match.params
+  const { userId } = match.params;
 
   const [userData, setUserData] = useState({
-    // Initialize with the user's data
+   
     username: '',
     email: '',
     password: '',
   });
 
-  const [error, setError] = useState(null); // State to store error message
+  const [error, setError] = useState(null);
 
   const handleUpdateUser = () => {
-    // Send a PATCH request to update user data
+   
     fetch(`/users/${userId}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(userData), // Include the updated user data
+      body: JSON.stringify(userData), 
     })
       .then((response) => {
-        console.log('Response status:', response.status); // Log the response status
+        console.log('Response status:', response.status); 
         if (response.status === 200) {
           return response.json();
         } else {
@@ -30,14 +30,14 @@ function UpdateUserForm({ match }) {
         }
       })
       .then((data) => {
-        // Handle the updated user data (e.g., display a success message)
-        console.log('User updated:', data); // Log the updated user data
-        setError(null); // Clear any previous error
+        
+        console.log('User updated:', data); 
+        setError(null);
       })
       .catch((error) => {
-        // Handle errors (e.g., display an error message)
-        console.error('Update error:', error); // Log the error
-        setError(error.message); // Set the error message
+       
+        console.error('Update error:', error); 
+        setError(error.message); 
       });
   };
 
@@ -49,11 +49,11 @@ function UpdateUserForm({ match }) {
     });
   };
 
-  console.log('userData:', userData); // Log the current userData
+  console.log('userData:', userData); 
 
   return (
     <div>
-      {/* Input fields for updating user data */}
+   
       <input
         type="text"
         name="username"
@@ -76,8 +76,7 @@ function UpdateUserForm({ match }) {
         onChange={handleInputChange}
       />
       <button onClick={handleUpdateUser}>Update User</button>
-      
-      {/* Display error message if there's an error */}
+     
       {error && <div className="error">{error}</div>}
     </div>
   );

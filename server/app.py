@@ -17,7 +17,7 @@ class RegisterUserResource(Resource):
     def post(self):
         data = request.get_json()
 
-        # Check if the required fields are present in the request data
+        
         required_fields = ["username", "email", "password"]
         if not all(field in data for field in required_fields):
             return (
@@ -25,7 +25,7 @@ class RegisterUserResource(Resource):
                 400,
             )
 
-        # Check if a user with the same username or email already exists
+        
         existing_user = User.query.filter_by(username=data["username"]).first()
         if existing_user:
             return (
@@ -41,17 +41,17 @@ class RegisterUserResource(Resource):
             )
 
         try:
-            # Create a new User instance and set the username and email
+           
             new_user = User(username=data["username"], email=data["email"])
 
-            # Hash the plaintext password and set it in the User model
+         
             new_user.password_hash = data["password"]
 
-            # Add the new user to the database
+            
             db.session.add(new_user)
             db.session.commit()
 
-            # Store the user's ID in the session to authenticate them
+         
            
 
             response_data = {"message": "User registered successfully"}
@@ -100,7 +100,6 @@ class Logout(Resource):
         return {}, 204
 
 
-# Add the RegisterUserResource to your API
 api.add_resource(RegisterUserResource, "/register")
 api.add_resource(Login, "/login")
 api.add_resource(CheckSession, '/check-session')
@@ -117,14 +116,13 @@ def update_user(user_id):
     if request.method == 'PATCH':
         data = request.get_json()
 
-        # Check if the new username already exists for another user
+       
         new_username = data.get("username")
         existing_user_with_username = User.query.filter(User.username == new_username).first()
 
         if existing_user_with_username and existing_user_with_username.id != user_id:
             return json.dumps({"error": "Username is already taken"}), 400
 
-        # Update the user's data
         for attr in data:
             setattr(user, attr, data[attr])
 
@@ -135,7 +133,6 @@ def update_user(user_id):
         return json.dumps(response_data), 200
 
 
-# Get all users
 @app.route("/users", methods=["GET"])
 def get_users():
     users = User.query.all()
@@ -145,7 +142,7 @@ def get_users():
 
     return jsonify([user.to_dict() for user in users]), 200
 
-# Delete a user by username
+
 @app.route("/users/<int:user_id>", methods=["DELETE"])
 def delete_user(user_id):
     user = User.query.get(user_id)
@@ -164,7 +161,7 @@ def handle_employees():
     if request.method == 'POST':
         data = request.json
 
-        # Validate the data (e.g., check if required fields are present)
+      
         if 'name' not in data or 'level' not in data:
             return jsonify({'error': 'Name and level are required fields'}), 400
 
@@ -210,7 +207,7 @@ def handle_tasks():
         title = data.get('title')
         description = data.get('description')
 
-        # Create the task without a user association
+    
         task = Task(title=title, description=description)
 
         db.session.add(task)
@@ -224,6 +221,24 @@ def handle_tasks():
             return jsonify(task_list), 200
         except Exception as e:
             return jsonify({'error': str(e)}), 500
+
+
+@app.route('/tasks/<int:taskId>', methods=['DELETE'])
+def delete_task(taskId):
+    try:
+        task = Task.query.get(taskId)
+        if not task:
+            return jsonify({'error': 'Task not found'}), 404
+
+        db.session.delete(task)
+        db.session.commit()
+
+        return jsonify({'message': 'Task deleted successfully'}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+
 
 
 if __name__ == '__main__':

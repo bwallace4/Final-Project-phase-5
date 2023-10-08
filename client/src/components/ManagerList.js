@@ -5,8 +5,8 @@ function ManagerList() {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
-    email: "", // Add email field
-    department: "", // Add department field
+    email: "", 
+    department: "", 
     title: "",
   });
 
@@ -31,7 +31,7 @@ function ManagerList() {
         throw new Error("Failed to create manager");
       }
 
-      // Reset the form fields
+   
       setFormData({
         name: "",
         email: "",
@@ -39,7 +39,7 @@ function ManagerList() {
         title: "",
       });
 
-      // Fetch the updated list of managers
+     
       fetchManagers();
     } catch (error) {
       console.error(error);

@@ -16,19 +16,18 @@ if __name__ == '__main__':
     with app.app_context():
         print("Starting seed...")
         # Seed code goes here!
-        for _ in range(10):  # Change the number as needed
+        for _ in range(10):  
             username = fake.user_name()
             email = fake.email()
-            password = fake.password(length=10)  # Generate a random fake password
+            password = fake.password(length=10) 
 
-            # Create a new user instance and set the attributes
+           
             new_user = User(username=username, email=email)
-            new_user.password_hash = password  # Hash the password using your User model setter
-
-            # Add the user to the database session
+            new_user.password_hash = password  
+           
             db.session.add(new_user)
 
-        # Commit the changes to the database (outside of the for loop)
+       
         db.session.commit()
 
         print("Seed completed successfully!")

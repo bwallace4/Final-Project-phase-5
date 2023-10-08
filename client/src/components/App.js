@@ -7,7 +7,7 @@ import LoginForm from './LoginForm';
 import CheckSession from './CheckSession';
 import Logout from './Logout';
 import UpdateUserForm from './UpdateUserForm';
-import TaskList from './TaskList'; // Import the TaskList component
+import TaskList from './TaskList'; 
 import EmployeeList from './EmployeeList';
 import ManagerList from './ManagerList';
 import './Navbar.css';
@@ -30,10 +30,10 @@ function App() {
             <Link to="/login">Login</Link>
           </li>
           <li>
-            <Link to="/task-list">Task List</Link> {/* Add this link */}
+            <Link to="/task-list">Task List</Link>
           </li>
           <li>
-            <Link to="/employees">Employees</Link> {/* Add a link to the Employees page */}
+            <Link to="/employees">Employees</Link> 
           </li>
           <li>
             <Link to="/managers">Managers</Link>

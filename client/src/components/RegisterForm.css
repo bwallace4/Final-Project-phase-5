@@ -1,6 +1,6 @@
-/* RegisterForm.css */
 
-/* Style the form container */
+
+
 .register-form-container {
     width: 300px;
     margin: 0 auto;
@@ -10,7 +10,7 @@
     background-color: #f9f9f9;
   }
   
-  /* Style input fields */
+  
   .register-form-container input {
     width: 100%;
     padding: 10px;
@@ -19,7 +19,7 @@
     border-radius: 5px;
   }
   
-  /* Style the register button */
+
   .register-form-container button {
     width: 100%;
     padding: 10px;
@@ -30,7 +30,7 @@
     cursor: pointer;
   }
   
-  /* Style the error message */
+
   .register-form-container p.error-message {
     color: red;
     font-weight: bold

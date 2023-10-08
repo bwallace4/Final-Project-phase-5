@@ -9,10 +9,9 @@ function RegisterForm() {
     password: '',
   });
 
-  const [errors, setErrors] = useState({}); // Store validation errors
-  const [registrationStatus, setRegistrationStatus] = useState(''); // Store registration status message
-  const [serverResponseData, setServerResponseData] = useState(null); // Store server response data
-
+  const [errors, setErrors] = useState({}); 
+  const [registrationStatus, setRegistrationStatus] = useState(''); 
+  const [serverResponseData, setServerResponseData] = useState(null); 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData({
@@ -22,7 +21,7 @@ function RegisterForm() {
   };
 
   const handleRegistration = () => {
-    // Send a POST request to /register with formData
+  
     fetch('/register', {
       method: 'POST',
       headers: {
@@ -33,28 +32,28 @@ function RegisterForm() {
       .then((response) => response.json())
       .then((data) => {
         console.log('Data received from server:', data);
-        // Store the server response data
+     
         setServerResponseData(data);
 
         if (data.error) {
-          // Handle validation errors received from the server
+          
           setErrors(data);
           setRegistrationStatus('Registration failed. Please fix the errors.');
         } else {
-          // Clear any previous errors
+         
           setErrors({});
-          // Check if registration was successful
+       
           if (data.message === 'User registered successfully') {
             setRegistrationStatus('Registration successful. Redirecting...');
-            // Redirect the user to another page upon successful registration
+            
             
           }
         }
       })
       .catch((error) => {
-        // Handle any network or request errors
+        
         console.error(error);
-        // Optionally, you can set an error state here to inform the user
+        
       });
   };
 

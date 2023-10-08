@@ -21,7 +21,7 @@ function LoginForm() {
   };
 
   const handleLogin = () => {
-    // Send a POST request to your Flask login route with formData
+   
     fetch('/login', {
       method: 'POST',
       headers: {
@@ -31,10 +31,9 @@ function LoginForm() {
     })
       .then((response) => {
         if (response.status === 200) {
-          // Login successful, redirect to a protected route
-          history.push('/dashboard'); // Change the route to your protected dashboard
+          history.push('/dashboard'); 
         } else {
-          // Login failed, handle the error message from the server
+          
           response.json().then((data) => setError(data.error));
         }
       })
