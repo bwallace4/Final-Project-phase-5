@@ -191,10 +191,21 @@ def create_manager():
 @app.route('/tasks', methods=['POST'])
 def create_task():
     data = request.json
-    task = Task(**data)
+    title = data.get('title')
+    description = data.get('description')
+
+    # Create the task without a user association
+    task = Task(title=title, description=description)
+
     db.session.add(task)
     db.session.commit()
+
     return jsonify(task.to_dict()), 201
+
+
+
+
+
 
 @app.route('/associate_users_employees', methods=['POST'])
 def associate_users_employees():
@@ -227,9 +238,6 @@ def associate_users_employees():
         return jsonify({'error': 'Database error', 'details': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+   app.run(port=5555, debug=True)
 
-
-if __name__ == '__main__':
-    app.run(port=5555, debug=True)
 

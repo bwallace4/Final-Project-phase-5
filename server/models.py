@@ -64,11 +64,7 @@ class Task(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=True)
-    due_date = db.Column(db.Date, nullable=True)
-    completed = db.Column(db.Boolean, default=False)
-    # Define relationships if any, for example, a task belongs to a user
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    user = db.relationship('User', backref=db.backref('tasks', lazy=True))
+   
 
 
 class Manager(db.Model, SerializerMixin):
