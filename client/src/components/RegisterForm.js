@@ -1,104 +1,80 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
 import './RegisterForm.css';
 
 function RegisterForm() {
-
-  const [formData, setFormData] = useState({
+  // Initial form values
+  const initialValues = {
     username: '',
     email: '',
     password: '',
-  });
-
-  const [errors, setErrors] = useState({}); 
-  const [registrationStatus, setRegistrationStatus] = useState(''); 
-  const [serverResponseData, setServerResponseData] = useState(null); 
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
   };
 
-  const handleRegistration = () => {
-  
-    fetch('/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('Data received from server:', data);
-     
-        setServerResponseData(data);
+  // Validation schema using Yup
+  const validationSchema = Yup.object().shape({
+    username: Yup.string().required('Username is required'),
+    email: Yup.string().email('Invalid email').required('Email is required'),
+    password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
+  });
 
-        if (data.error) {
-          
-          setErrors(data);
-          setRegistrationStatus('Registration failed. Please fix the errors.');
-        } else {
-         
-          setErrors({});
-       
-          if (data.message === 'User registered successfully') {
-            setRegistrationStatus('Registration successful. Redirecting...');
-            
-            
-          }
-        }
-      })
-      .catch((error) => {
-        
-        console.error(error);
-        
-      });
+  // Function to handle form submission
+  const handleSubmit = (values, { setSubmitting }) => {
+    // Simulate a server request
+    setTimeout(() => {
+      console.log('Form values submitted:', values);
+      setSubmitting(false);
+    }, 1000);
   };
 
   return (
     <div className="register-form-container">
-      <h2>Register</h2>
-      {registrationStatus && <p className="registration-status">{registrationStatus}</p>}
-      <div>
-        <input
-          type="text"
-          name="username"
-          placeholder="Username"
-          value={formData.username}
-          onChange={handleInputChange}
-        />
-        {errors.username && <p className="error-message">Error: {errors.username}</p>}
-      </div>
-      <div>
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={handleInputChange}
-        />
-        {errors.email && <p className="error-message">Error: {errors.email}</p>}
-      </div>
-      <div>
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleInputChange}
-        />
-        {errors.password && <p className="error-message">Error: {errors.password}</p>}
-      </div>
-      <div>
-        <button onClick={handleRegistration}>Register</button>
-      </div>
-      {serverResponseData && (
-        <div className="server-response">
-          <p>Data received from server: {JSON.stringify(serverResponseData)}</p>
-        </div>
-      )}
+      <h2>Sign Up</h2>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+      >
+        {({ isSubmitting }) => (
+          <Form>
+            <div>
+              <label htmlFor="username">Username</label>
+              <Field
+                type="text"
+                id="username"
+                name="username"
+                placeholder="Username"
+              />
+              <ErrorMessage name="username" component="p" className="error-message" />
+            </div>
+            <div>
+              <label htmlFor="email">Email</label>
+              <Field
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Email"
+              />
+              <ErrorMessage name="email" component="p" className="error-message" />
+            </div>
+            <div>
+              <label htmlFor="password">Password</label>
+              <Field
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Password"
+              />
+              <ErrorMessage name="password" component="p" className="error-message" />
+            </div>
+            <div>
+              <button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? 'Submitting...' : 'Register'}
+              </button>
+            </div>
+          </Form>
+        )}
+      </Formik>
     </div>
   );
 }

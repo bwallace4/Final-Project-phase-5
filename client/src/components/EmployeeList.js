@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 function EmployeeList() {
   const [employees, setEmployees] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [newEmployeeName, setNewEmployeeName] = useState("");
-  const [newEmployeeLevel, setNewEmployeeLevel] = useState("");
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -24,54 +24,14 @@ function EmployeeList() {
       }
     };
 
-  
     fetchEmployees();
 
-   
     const intervalId = setInterval(() => {
       fetchEmployees();
     }, 4000);
 
-   
     return () => clearInterval(intervalId);
   }, []);
-
-  const handleNameChange = (e) => {
-    setNewEmployeeName(e.target.value);
-  };
-
-  const handleLevelChange = (e) => {
-    setNewEmployeeLevel(e.target.value);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      const response = await fetch("/employees", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: newEmployeeName,
-          level: parseInt(newEmployeeLevel),
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to add a new employee");
-      }
-
-      const data = await response.json();
-      setEmployees([...employees, data]);
-
-      setNewEmployeeName("");
-      setNewEmployeeLevel("");
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   const handleDelete = async (employeeId) => {
     try {
@@ -83,29 +43,84 @@ function EmployeeList() {
         throw new Error("Failed to delete the employee");
       }
 
-      const updatedEmployees = employees.filter((employee) => employee.id !== employeeId);
+      const updatedEmployees = employees.filter(
+        (employee) => employee.id !== employeeId
+      );
       setEmployees(updatedEmployees);
     } catch (error) {
       console.error(error);
     }
   };
 
+  // Define the validation schema using Yup
+  const validationSchema = Yup.object().shape({
+    newEmployeeName: Yup.string().required("Employee Name is required"),
+    newEmployeeLevel: Yup.number()
+      .integer("Level must be an integer")
+      .required("Employee Level is required"),
+  });
+
+ 
+  const formik = useFormik({
+    initialValues: {
+      newEmployeeName: "",
+      newEmployeeLevel: "",
+    },
+    validationSchema,
+    onSubmit: async (values) => {
+      try {
+        const response = await fetch("/employees", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: values.newEmployeeName,
+            level: parseInt(values.newEmployeeLevel),
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to add a new employee");
+        }
+
+        const data = await response.json();
+        setEmployees([...employees, data]);
+
+       
+        formik.resetForm();
+      } catch (error) {
+        console.error(error);
+      }
+    },
+  });
+
   return (
     <div>
       <h2>Employee List</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={formik.handleSubmit}>
         <input
           type="text"
           placeholder="Employee Name"
-          value={newEmployeeName}
-          onChange={handleNameChange}
+          name="newEmployeeName"
+          value={formik.values.newEmployeeName}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
         />
+        {formik.touched.newEmployeeName && formik.errors.newEmployeeName ? (
+          <div>{formik.errors.newEmployeeName}</div>
+        ) : null}
         <input
           type="number"
           placeholder="Employee Level"
-          value={newEmployeeLevel}
-          onChange={handleLevelChange}
+          name="newEmployeeLevel"
+          value={formik.values.newEmployeeLevel}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
         />
+        {formik.touched.newEmployeeLevel && formik.errors.newEmployeeLevel ? (
+          <div>{formik.errors.newEmployeeLevel}</div>
+        ) : null}
         <button type="submit">Add Employee</button>
       </form>
       {isLoading ? (

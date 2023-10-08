@@ -1,48 +1,45 @@
 import React, { useState, useEffect } from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 function ManagerList() {
   const [managers, setManagers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    department: "",
-    title: "",
-  });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      email: "",
+      department: "",
+      title: "",
+    },
+    validationSchema: Yup.object({
+      name: Yup.string().required("Name is required"),
+      email: Yup.string().email("Invalid email address").required("Email is required"),
+      department: Yup.string(),
+      title: Yup.string().required("Title is required"),
+    }),
+    onSubmit: async (values) => {
+      try {
+        const response = await fetch("/managers", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(values),
+        });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+        if (!response.ok) {
+          throw new Error("Failed to create manager");
+        }
 
-    try {
-      const response = await fetch("/managers", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to create manager");
+        formik.resetForm();
+        fetchManagers();
+      } catch (error) {
+        console.error(error);
       }
-
-      setFormData({
-        name: "",
-        email: "",
-        department: "",
-        title: "",
-      });
-
-      fetchManagers();
-    } catch (error) {
-      console.error(error);
-    }
-  };
+    },
+  });
 
   const handleDelete = async (managerId) => {
     try {
@@ -54,7 +51,6 @@ function ManagerList() {
         throw new Error("Failed to delete the manager");
       }
 
-     
       const updatedManagers = managers.filter(
         (manager) => manager.id !== managerId
       );
@@ -88,34 +84,41 @@ function ManagerList() {
   return (
     <div>
       <h2>Manager List</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={formik.handleSubmit}>
         <div>
           <label>Name:</label>
           <input
             type="text"
             name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
+            value={formik.values.name}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
           />
+          {formik.touched.name && formik.errors.name ? (
+            <div className="error">{formik.errors.name}</div>
+          ) : null}
         </div>
         <div>
           <label>Email:</label>
           <input
-            type="email" 
+            type="email"
             name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
           />
+          {formik.touched.email && formik.errors.email ? (
+            <div className="error">{formik.errors.email}</div>
+          ) : null}
         </div>
         <div>
           <label>Department:</label>
           <input
             type="text"
             name="department"
-            value={formData.department}
-            onChange={handleChange}
+            value={formik.values.department}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
           />
         </div>
         <div>
@@ -123,10 +126,13 @@ function ManagerList() {
           <input
             type="text"
             name="title"
-            value={formData.title}
-            onChange={handleChange}
-            required
+            value={formik.values.title}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
           />
+          {formik.touched.title && formik.errors.title ? (
+            <div className="error">{formik.errors.title}</div>
+          ) : null}
         </div>
         <button type="submit">Add Manager</button>
       </form>
