@@ -12,8 +12,9 @@ My app allows users to put themselves in the shoes of a manager and a employer. 
   - [Acknowledgments](#acknowledgments)
 
 ## Description
+
 I had to create a phase 5 final project for The Flatiron school.
-First I used a Flask/SQLAlchemy API backend with a React frontend, But I had to create my own API. Creating models and using crud actions that included create,read, update and delete. I also included different client-side routes using React Router. I protected passwords for all of my users when I implemented password hashing and authentication. When registering and logging in I used validations to set standards on my input fields. Then i connected the backend to the frontend using fetch(). 
+First I used a Flask/SQLAlchemy API backend with a React frontend, But I had to create my own API. Creating models and using crud actions,that included create,read, update and delete. I also included different client-side routes using React Router.I protected passwords for all of my users when I implemented password hashing and authentication. When registering and logging in I used validations to set standards on my input fields. Then i connected the backend to the frontend using fetch(). Overall, this project allowed me to demonstrate my skills in web development, including backend and frontend, data management, and security measures.
 
 
 ## Getting Started
