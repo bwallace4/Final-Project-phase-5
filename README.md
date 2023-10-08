@@ -4,13 +4,11 @@ My app allows users to put themselves in the shoes of a manager and a employer. 
 
 ## Table of Contents
   - [Description](#description)
-  - [Features](#features)
   - [Getting Started](#getting-started)
     - [Prerequisites](#prerequisites)
     - [Installation](#installation)
   - [Usage](#usage)
   - [Contributing](#contributing)
-  - [License](#license)
   - [Acknowledgments](#acknowledgments)
 
 ## Description
@@ -50,30 +48,20 @@ webpack compiled successfully
 
 ### Prerequisites
 
-Make sure to have 
+Make sure to have these packages installed
+
+flask, flask-sqlalchemy, flask-migrate, sqlalchemy-serlizer, flask-cors, 
+formik,react, react-router-dom, Bcrypt,flask_restful
 
 ### Installation
 
-Step-by-step instructions on how to install your project.
-
-1. Clone this repository.
-2. Navigate to the project directory.
-3. Run `npm install` to install dependencies.
-4. ...
-
-## Usage
-
-Explain how users can use your project. Provide examples, code snippets, or screenshots if necessary.
+we wanna run pipenv install & shell to download the dependencies 
+We want to run flask db init, flask db upgrade head for our migrations 
 
 ## Contributing
+Others can contribute by suggesting ways to improve my code
 
-Explain how others can contribute to your project. Include guidelines for submitting bug reports, feature requests, and pull requests.
-
-## License
-
-This project is licensed under the [License Name] - see the [LICENSE.md](LICENSE.md) file for details.
 
 ## Acknowledgments
 
-Mention any individuals, libraries, or resources that you want to acknowledge or give credit to.
-
+I like to credit The Flatiron School
