@@ -182,6 +182,19 @@ def handle_employees():
         except Exception as e:
             return jsonify({'error': str(e)}), 500
 
+@app.route('/employees/<int:employee_id>', methods=['DELETE'])
+def delete_employee(employee_id):
+    try:
+        employee = Employee.query.get(employee_id)
+        if not employee:
+            return jsonify({'error': 'Employee not found'}), 404
+
+        db.session.delete(employee)
+        db.session.commit()
+
+        return jsonify({'message': 'Employee deleted successfully'}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
     
 @app.route('/managers', methods=['POST', 'GET'])
 def handle_managers():
@@ -199,6 +212,19 @@ def handle_managers():
         except Exception as e:
             return jsonify({'error': str(e)}), 500
 
+@app.route('/managers/<int:manager_id>', methods=['DELETE'])
+def delete_manager(manager_id):
+    try:
+        manager = Manager.query.get(manager_id)
+        if not manager:
+            return jsonify({'error': 'Manager not found'}), 404
+
+        db.session.delete(manager)
+        db.session.commit()
+
+        return jsonify({'message': 'Manager deleted successfully'}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/tasks', methods=['POST', 'GET'])
 def handle_tasks():
