@@ -159,45 +159,71 @@ def delete_user(user_id):
     return jsonify({"message": "User deleted successfully"}), 200
 
 
-@app.route('/employees', methods=['POST'])
-def create_employee():
-    data = request.json
+@app.route('/employees', methods=['POST', 'GET'])
+def handle_employees():
+    if request.method == 'POST':
+        data = request.json
 
-    # Validate the data (e.g., check if required fields are present)
-    if 'name' not in data or 'level' not in data:
-        return jsonify({'error': 'Name and level are required fields'}), 400
+        # Validate the data (e.g., check if required fields are present)
+        if 'name' not in data or 'level' not in data:
+            return jsonify({'error': 'Name and level are required fields'}), 400
 
-    employee = Employee(**data)
+        employee = Employee(**data)
 
-    try:
-        db.session.add(employee)
-        db.session.commit()
-        return jsonify({'message': 'Employee created successfully', 'employee_id': employee.id}), 201
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({'error': 'Failed to create employee', 'details': str(e)}), 500
+        try:
+            db.session.add(employee)
+            db.session.commit()
+            return jsonify({'message': 'Employee created successfully', 'employee_id': employee.id}), 201
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'error': 'Failed to create employee', 'details': str(e)}), 500
+    elif request.method == 'GET':
+        try:
+            employees = Employee.query.all()
+            employee_list = [employee.to_dict() for employee in employees]
+            return jsonify(employee_list), 200
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+
     
-@app.route('/managers', methods=['POST'])
-def create_manager():
-    data = request.json
-    manager = Manager(**data)
-    db.session.add(manager)
-    db.session.commit()
-    return jsonify(manager.to_dict()), 201
+@app.route('/managers', methods=['POST', 'GET'])
+def handle_managers():
+    if request.method == 'POST':
+        data = request.json
+        manager = Manager(**data)
+        db.session.add(manager)
+        db.session.commit()
+        return jsonify(manager.to_dict()), 201
+    elif request.method == 'GET':
+        try:
+            managers = Manager.query.all()
+            manager_list = [manager.to_dict() for manager in managers]
+            return jsonify(manager_list), 200
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
 
-@app.route('/tasks', methods=['POST'])
-def create_task():
-    data = request.json
-    title = data.get('title')
-    description = data.get('description')
 
-    # Create the task without a user association
-    task = Task(title=title, description=description)
+@app.route('/tasks', methods=['POST', 'GET'])
+def handle_tasks():
+    if request.method == 'POST':
+        data = request.json
+        title = data.get('title')
+        description = data.get('description')
 
-    db.session.add(task)
-    db.session.commit()
+        # Create the task without a user association
+        task = Task(title=title, description=description)
 
-    return jsonify(task.to_dict()), 201
+        db.session.add(task)
+        db.session.commit()
+
+        return jsonify(task.to_dict()), 201
+    elif request.method == 'GET':
+        try:
+            tasks = Task.query.all()
+            task_list = [task.to_dict() for task in tasks]
+            return jsonify(task_list), 200
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
 
 
 if __name__ == '__main__':

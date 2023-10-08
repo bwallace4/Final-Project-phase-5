@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import './UserList.css';
+import React, { useState, useEffect } from "react";
+import "./UserList.css";
 
 function UserList() {
   const [users, setUsers] = useState([]);
@@ -9,9 +9,9 @@ function UserList() {
     const getUsers = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch('/users'); // Replace with your API endpoint
+        const response = await fetch("/users"); // Replace with your API endpoint
         if (!response.ok) {
-          throw new Error('Failed to fetch users');
+          throw new Error("Failed to fetch users");
         }
         const data = await response.json();
         // Sort users by ID in ascending order
@@ -31,12 +31,12 @@ function UserList() {
 
   const handleDeleteUser = async (id) => {
     try {
-      if (window.confirm('Are you sure you want to delete this user?')) {
+      if (window.confirm("Are you sure you want to delete this user?")) {
         const response = await fetch(`/users/${id}`, {
-          method: 'DELETE',
+          method: "DELETE",
         });
         if (!response.ok) {
-          throw new Error('Failed to delete user');
+          throw new Error("Failed to delete user");
         }
         setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
       }
@@ -46,12 +46,12 @@ function UserList() {
   };
 
   return (
-    <div className="user-list-container">
+    <div className='user-list-container'>
       <h2>User List</h2>
       {isLoading ? (
         <p>Loading...</p>
       ) : (
-        <table className="user-table">
+        <table className='user-table'>
           <thead>
             <tr>
               <th>Number</th>
@@ -67,7 +67,9 @@ function UserList() {
                 <td>{user.username}</td>
                 <td>{user.email}</td> {/* Display the user's email */}
                 <td>
-                  <button onClick={() => handleDeleteUser(user.id)}>Delete</button>
+                  <button onClick={() => handleDeleteUser(user.id)}>
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))}
