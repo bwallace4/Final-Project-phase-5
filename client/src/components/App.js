@@ -9,6 +9,7 @@ import Logout from './Logout';
 import UpdateUserForm from './UpdateUserForm';
 import TaskList from './TaskList'; // Import the TaskList component
 import EmployeeList from './EmployeeList';
+import ManagerList from './ManagerList';
 import './Navbar.css';
 
 function App() {
@@ -32,7 +33,10 @@ function App() {
             <Link to="/task-list">Task List</Link> {/* Add this link */}
           </li>
           <li>
-          <Link to="/employees">Employees</Link> {/* Add a link to the Employees page */}
+            <Link to="/employees">Employees</Link> {/* Add a link to the Employees page */}
+          </li>
+          <li>
+            <Link to="/managers">Managers</Link>
           </li>
           <li>
             <Logout />
@@ -49,9 +53,10 @@ function App() {
             <CheckSession />
           </div>
         </Route>
+        <Route path="/managers" component={ManagerList} /> 
         <Route path="/update-user/:userId" component={UpdateUserForm} />
-        <Route path="/task-list" component={TaskList} /> {/* Add this route */}
-        <Route path="/employees" component={EmployeeList} /> {/* Add this route */}
+        <Route path="/task-list" component={TaskList} /> 
+        <Route path="/employees" component={EmployeeList} /> 
         <Route path="/" component={RegisterForm} />
       </Switch>
     </Router>
