@@ -6,8 +6,9 @@ import UserList from './UserList';
 import LoginForm from './LoginForm';
 import CheckSession from './CheckSession';
 import Logout from './Logout';
-import UpdateUserForm from './UpdateUserForm'; // Import the UpdateUserForm component
-import './Navbar.css'; 
+import UpdateUserForm from './UpdateUserForm';
+import TaskList from './TaskList'; // Import the TaskList component
+import './Navbar.css';
 
 function App() {
   return (
@@ -27,6 +28,9 @@ function App() {
             <Link to="/login">Login</Link>
           </li>
           <li>
+            <Link to="/task-list">Task List</Link> {/* Add this link */}
+          </li>
+          <li>
             <Logout />
           </li>
         </ul>
@@ -41,7 +45,8 @@ function App() {
             <CheckSession />
           </div>
         </Route>
-        <Route path="/update-user/:userId" component={UpdateUserForm} /> {/* Add this route */}
+        <Route path="/update-user/:userId" component={UpdateUserForm} />
+        <Route path="/task-list" component={TaskList} /> {/* Add this route */}
         <Route path="/" component={RegisterForm} />
       </Switch>
     </Router>
