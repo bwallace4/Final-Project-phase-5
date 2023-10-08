@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import './RegisterForm.css';
 
 function RegisterForm() {
-  const history = useHistory();
+
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -48,9 +47,7 @@ function RegisterForm() {
           if (data.message === 'User registered successfully') {
             setRegistrationStatus('Registration successful. Redirecting...');
             // Redirect the user to another page upon successful registration
-            setTimeout(() => {
-              history.push('/success-page');
-            }, 2000); // Redirect after 2 seconds
+            
           }
         }
       })

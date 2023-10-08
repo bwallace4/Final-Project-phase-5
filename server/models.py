@@ -13,7 +13,6 @@ user_employee_association = db.Table(
     db.Column('employee_id', db.Integer, db.ForeignKey('employee.id'))
 )
 
-
 class User(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
@@ -65,8 +64,6 @@ class Task(db.Model, SerializerMixin):
     title = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=True)
    
-
-
 class Manager(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
