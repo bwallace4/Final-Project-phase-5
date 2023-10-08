@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
-function LoginForm() {
+const LoginForm = () => {
   const history = useHistory();
 
   const initialValues = {
@@ -16,7 +16,7 @@ function LoginForm() {
     password: Yup.string().required('Password is required'),
   });
 
-  const onSubmit = (values, { setSubmitting }) => {
+  const handleSubmit = (values, { setSubmitting, setErrors }) => {
     fetch('/login', {
       method: 'POST',
       headers: {
@@ -26,12 +26,12 @@ function LoginForm() {
     })
       .then((response) => {
         setSubmitting(false);
+
         if (response.status === 200) {
           history.push('/dashboard');
         } else {
           response.json().then((data) => {
-            
-            console.error('Login error:', data.error);
+            setErrors({ username: data.error });
           });
         }
       })
@@ -47,7 +47,7 @@ function LoginForm() {
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={onSubmit}
+        onSubmit={handleSubmit}
       >
         {({ isSubmitting }) => (
           <Form>
@@ -59,7 +59,11 @@ function LoginForm() {
                 id="username"
                 placeholder="Username"
               />
-              <ErrorMessage name="username" component="div" className="error" />
+              <ErrorMessage
+                name="username"
+                component="div"
+                className="error-message"
+              />
             </div>
             <div>
               <label htmlFor="password">Password:</label>
@@ -69,11 +73,15 @@ function LoginForm() {
                 id="password"
                 placeholder="Password"
               />
-              <ErrorMessage name="password" component="div" className="error" />
+              <ErrorMessage
+                name="password"
+                component="div"
+                className="error-message"
+              />
             </div>
             <div>
               <button type="submit" disabled={isSubmitting}>
-                Login
+                {isSubmitting ? 'Logging In...' : 'Login'}
               </button>
             </div>
           </Form>
@@ -81,6 +89,6 @@ function LoginForm() {
       </Formik>
     </div>
   );
-}
+};
 
 export default LoginForm;
